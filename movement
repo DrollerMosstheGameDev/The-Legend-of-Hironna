@@ -1,1 +1,72 @@
+#include <iostream>
+#include <conio.h> // For _getch() function
 
+class Player {
+public:
+    int x, y; // Player coordinates
+    char facing; // Player facing direction ('^', 'v', '<', '>')
+};
+
+class RPGMovementSystem {
+public:
+    RPGMovementSystem() : player({ 0, 0, '^' }) {}
+
+    void movePlayer(char direction) {
+        switch (direction) {
+        case 'w':
+            player.y--;
+            player.facing = '^';
+            break;
+        case 's':
+            player.y++;
+            player.facing = 'v';
+            break;
+        case 'a':
+            player.x--;
+            player.facing = '<';
+            break;
+        case 'd':
+            player.x++;
+            player.facing = '>';
+            break;
+        }
+    }
+
+    void display() {
+        system("cls"); // Clear console screen (Windows specific)
+
+        // Display player
+        std::cout << "Player Position: (" << player.x << ", " << player.y << ")\n";
+        std::cout << "Facing: " << player.facing << "\n";
+
+        // Display grid with player
+        for (int i = 0; i < 5; ++i) {
+            for (int j = 0; j < 5; ++j) {
+                if (i == player.y && j == player.x)
+                    std::cout << player.facing;
+                else
+                    std::cout << ".";
+            }
+            std::cout << "\n";
+        }
+    }
+
+private:
+    Player player;
+};
+
+int main() {
+    RPGMovementSystem game;
+
+    while (true) {
+        game.display();
+
+        char input = _getch(); // Wait for a key press
+        if (input == 'q')
+            break; // Quit the game if 'q' is pressed
+        else
+            game.movePlayer(input);
+    }
+
+    return 0;
+}
